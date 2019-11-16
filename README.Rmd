@@ -49,6 +49,7 @@ cloudr::bmwc(cloudr::obama[1:200,],
              seed = 1)
 ```
 
+Increase word buffer
 ```{r results='hide'}
 cloudr::bmwc(cloudr::obama[1:200,],
              min_size = 30,
@@ -56,9 +57,8 @@ cloudr::bmwc(cloudr::obama[1:200,],
              spiral_step = 40,
              spiral_length = 100,
              angle_range = c(0, 0),
-             buffer = 5,
-             seed = 1,
-             show_word_buffer = TRUE )
+             buffer = 25,
+             seed = 1)
 ```
 
 ### A little bit of wobble

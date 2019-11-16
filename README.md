@@ -70,6 +70,8 @@ cloudr::bmwc(cloudr::obama[1:200,],
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
+Increase word buffer
+
 ``` r
 cloudr::bmwc(cloudr::obama[1:200,],
              min_size = 30,
@@ -77,9 +79,8 @@ cloudr::bmwc(cloudr::obama[1:200,],
              spiral_step = 40,
              spiral_length = 100,
              angle_range = c(0, 0),
-             buffer = 5,
-             seed = 1,
-             show_word_buffer = TRUE )
+             buffer = 25,
+             seed = 1)
 #> All words placed
 ```
 
