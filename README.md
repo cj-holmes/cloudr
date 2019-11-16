@@ -7,14 +7,14 @@
 
 <!-- badges: end -->
 
-**This is a personal project that is in development - it is not working
-properly**
+**This is a personal project. It is just for fun and it is not working
+properly at the moment**
 
-Just for fun, I’ve had a go at producing word cloud type graphics in R.
-At the moment, it’s slow and clunky. Personally I don’t believe that
-word clouds are a particularly useful or insightful way to visualise
-text analysis, but I do think they can look rather pretty and be good
-fun to make.
+I’ve had a go at producing word cloud type graphics in R in order to
+learn and devlop my coding skill. Personally I don’t believe that word
+clouds are a particularly useful or insightful way to visualise text
+analysis, but I do think they can look rather pretty and be good fun to
+make.
 
 I’m not really interested in developing code to extract words and their
 respective weights from a body of text. Here I am just interested in how
@@ -54,26 +54,100 @@ obama[1:10, ]
 
 ## Create word cloud
 
+### Straight wordcloud
+
 ``` r
-wc(obama$word[1:100], obama$count[1:100], 
-   seed=4,
-   lower_cex = 0.5, 
-   upper_cex = 6,
-   lo_col = "grey",
-   markup = FALSE)
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(0, 0),
+             buffer = 5,
+             seed = 1)
+#> All words placed
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 ``` r
-
-wc(obama$word[1:100], obama$count[1:100], 
-   seed=4,
-   lower_cex = 0.5, 
-   upper_cex = 6,
-   hi_col = "orange",
-   lo_col = "red",
-   markup = TRUE)
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(0, 0),
+             buffer = 5,
+             seed = 1,
+             show_word_buffer = TRUE )
+#> All words placed
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-2.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+
+### A little bit of wobble
+
+``` r
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(-5, 5),
+             buffer = 5,
+             seed = 1)
+#> All words placed
+```
+
+<img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+
+### Random angles
+
+``` r
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(-90, 90),
+             buffer = 5,
+             seed = 1)
+#> All words placed
+```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+
+### Change font
+
+``` r
+sysfonts::font_add(family = "old_eng", "C:/Windows/Fonts/OLDENGL.TTF")
+
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(-5, 5),
+             buffer = 5,
+             seed = 1,
+             font_family = "old_eng")
+#> All words placed
+```
+
+<img src="man/figures/README-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+
+## Example of buffer
+
+``` r
+word <- word_mat("aaaaabbbbb", weight=50, rot=0)
+plot_mat(word)
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
+``` r
+
+plot_mat(add_buffer(word, buffer = 10, fill = 50))
+```
+
+<img src="man/figures/README-unnamed-chunk-9-2.png" style="display: block; margin: auto;" />
