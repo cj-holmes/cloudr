@@ -70,16 +70,16 @@ cloudr::bmwc(cloudr::obama[1:200,],
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
-Increase word buffer
-
 ``` r
-cloudr::bmwc(cloudr::obama[1:200,],
+cloudr::bmwc(cloudr::obama[1:50,],
              min_size = 30,
              max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
+             v_buffer = 48,
+             h_buffer = 30,
+             spiral_step = 20,
+             spiral_length = 80,
              angle_range = c(0, 0),
-             buffer = 25,
+             buffer = 5,
              seed = 1)
 #> All words placed
 ```
@@ -137,6 +137,22 @@ cloudr::bmwc(cloudr::obama[1:200,],
 
 <img src="man/figures/README-unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
+\#\#\#Increase word buffer
+
+``` r
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(0, 0),
+             buffer = 25,
+             seed = 1)
+#> All words placed
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
 ## Example of buffer
 
 ``` r
@@ -144,11 +160,11 @@ word <- word_mat("aaaaabbbbb", weight=50, rot=0)
 plot_mat(word)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 ``` r
 
 plot_mat(add_buffer(word, buffer = 10, fill = 50))
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-2.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-2.png" style="display: block; margin: auto;" />

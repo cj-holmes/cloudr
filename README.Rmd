@@ -49,18 +49,6 @@ cloudr::bmwc(cloudr::obama[1:200,],
              seed = 1)
 ```
 
-Increase word buffer
-```{r results='hide'}
-cloudr::bmwc(cloudr::obama[1:200,],
-             min_size = 30,
-             max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
-             angle_range = c(0, 0),
-             buffer = 25,
-             seed = 1)
-```
-
 ### A little bit of wobble
 ```{r results='hide'}
 cloudr::bmwc(cloudr::obama[1:200,],
@@ -99,6 +87,19 @@ cloudr::bmwc(cloudr::obama[1:200,],
              seed = 1,
              font_family = "old_eng")
 ```
+
+###Increase word buffer
+```{r results='hide'}
+cloudr::bmwc(cloudr::obama[1:200,],
+             min_size = 30,
+             max_size = 350,
+             spiral_step = 40,
+             spiral_length = 100,
+             angle_range = c(0, 0),
+             buffer = 25,
+             seed = 1)
+```
+
 
 ## Example of buffer
 ```{r fig.width=4}
