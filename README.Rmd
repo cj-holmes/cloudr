@@ -87,7 +87,7 @@ cloudr::bmwc(cloudr::obama[1:200,],
              font_family = "old_eng")
 ```
 
-###Increase word buffer
+### Increase word buffer
 ```{r results='hide'}
 cloudr::bmwc(cloudr::obama[1:200,],
              min_size = 30,
@@ -102,7 +102,7 @@ cloudr::bmwc(cloudr::obama[1:200,],
 
 ## Example of buffer
 ```{r fig.width=4}
-word <- word_mat("aaaaabbbbb", weight=50, rot=0)
+word <- word_mat("aaabc", weight=50, rot=0)
 plot_mat(word)
 plot_mat(add_buffer(word, buffer = 10, fill = 50))
 ```

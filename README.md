@@ -118,7 +118,7 @@ cloudr::bmwc(cloudr::obama[1:200,],
 
 <img src="man/figures/README-unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
-\#\#\#Increase word buffer
+### Increase word buffer
 
 ``` r
 cloudr::bmwc(cloudr::obama[1:200,],
@@ -137,7 +137,7 @@ cloudr::bmwc(cloudr::obama[1:200,],
 ## Example of buffer
 
 ``` r
-word <- word_mat("aaaaabbbbb", weight=50, rot=0)
+word <- word_mat("aaabc", weight=50, rot=0)
 plot_mat(word)
 ```
 
