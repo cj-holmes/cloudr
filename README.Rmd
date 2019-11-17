@@ -13,16 +13,16 @@ knitr::opts_chunk$set(
   fig.height=8,
   fig.align='center')
 ```
-# cloudr
+# cloudr - bitmap (using fontr)
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-**This is a personal project. It is just for fun and it is not working properly at the moment**
+## **This is a personal project and a work in progress. It is not working properly**
 
 I've had a go at producing word cloud type graphics in R in order to learn and devlop my coding skill. Personally I don't believe that word clouds are a particularly useful or insightful way to visualise text analysis, but I do think they can look rather pretty and be good fun to make.
 
-I'm not really interested in developing code to extract words and their respective weights from a body of text. Here I am just interested in how to place the words (scaled to their weighting) on the page in the form of a word cloud. As such, the code im developing here needs to be supplied with a vector of words and a vector of their weights from which a word cloud will be generated.
+This 'bitmap' version of `cloudr` uses Yixuan's rather marvellous [fontr](https://github.com/yixuan/fontr) package in order to return bitmaps of the character glyphs. This allows for much faster collision detection of matrices.
 
 ## Add package to search path
 ```{r}
@@ -36,7 +36,6 @@ obama[1:10, ]
 ```
 
 ## Create word cloud
-
 ### Straight wordcloud
 ```{r results='hide'}
 cloudr::bmwc(cloudr::obama[1:200,],
@@ -105,7 +104,6 @@ cloudr::bmwc(cloudr::obama[1:200,],
 ```{r fig.width=4}
 word <- word_mat("aaaaabbbbb", weight=50, rot=0)
 plot_mat(word)
-
 plot_mat(add_buffer(word, buffer = 10, fill = 50))
 ```
 
