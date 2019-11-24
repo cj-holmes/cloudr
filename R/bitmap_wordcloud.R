@@ -25,8 +25,8 @@
 #'
 #' @examples
 bmwc <- function(data,
-                 min_size = 10, 
-                 max_size = 200,
+                 min_size = 25, 
+                 max_size = 300,
                  angle_range=c(0,0),
                  buffer = 5,
                  show_word_buffer = FALSE,
@@ -36,73 +36,53 @@ bmwc <- function(data,
                  font_face = "regular",
                  font_family = "sans",
                  seed = NULL, 
-                 spiral_length = 50, # spiral will extend to ~length/4 in all directions (radius ~L/4)
-                 spiral_step = 50,
-                 page_res = 600, 
-                 # Vertical and horizontal buffers (%)
-                 v_buffer = 40,
-                 h_buffer = 30){
-  
-  # data=cloudr::obama[1:300,]
-  # page_res = 300 
-  # min_size = 10 
-  # max_size = 200
-  # # Vertical and horizontal buffers (%)
-  # v_buffer = 45
-  # h_buffer = 20
-  # font_face = "regular"
-  # font_family = "sans"
-  # spiral_length = 50 # spiral will extend to ~length/4 in all directions (radius ~L/4)
-  # spiral_step = 50
-  # seed = NULL 
-  # view=TRUE 
-  # save=TRUE
-  # pcnt_vertical = 0.2
+                 v_buffer = 45,
+                 h_buffer = 35,
+                 page_w = 5000,
+                 page_h = 5000,
+                 spiral_radius = 1000,
+                 spiral_turns = 5,
+                 spiral_res = 500,
+                 markup = FALSE,
+                 plot_spirals = FALSE
+){
   
   # Set seed if given (for reproducability)
   if(!is.null(seed)){set.seed(seed)}
   
-  # Set overall page height and width (A4 dimensions in inches * resolution)
-  page_w <- floor(8.268 * page_res)
-  page_h <- floor(5.825 * page_res)
-  
   # Initialise page
   page <- matrix(NA, ncol=page_w, nrow=page_h)
   
-  
+  # Create dataframe, scale word size column to go between min and max and arrange bu descending size
   d <- 
     data %>% 
     mutate(weight = (((count-min(count))/max(count-min(count)))*(max_size - min_size))+min_size) %>%
     arrange(desc(weight))
   
-  # Add word matrices from fontr (some at 90 degrees (vertical))
-  # d$word_mat <- pmap(list(d$word, 
-  #                         d$weight, 
-  #                         sample(c(0, 90), size = nrow(d), 
-  #                                prob = c((1-pcnt_vertical), pcnt_vertical), 
-  #                                replace = TRUE)),
-  #                         word_mat, face=font_face, family=font_family)
-  
+  # Map across the words and weights to get the word matrices from fontr
   d$word_mat <- pmap(list(d$word, 
                           d$weight, 
                           sample(angle_range[1]:angle_range[2], size = nrow(d), replace = TRUE)),
                      word_mat, face=font_face, family=font_family)
   
-  
+  # Determine the boundaries for within which the initial randomised word positions are made
   h_bounds <- floor(c(1+ (page_w/100)*h_buffer, page_w-(page_w/100)*h_buffer))
   v_bounds <- floor(c(1+(page_h/100)*v_buffer, page_h - (page_h/100)*v_buffer))
   
+  # Add the random start points to the dataframe and generate a spiral for each word with its 
+  # origin at the randomise start location
+  # Also - add the buffer to each word
+  # Also add the spiral (with the word weight as the resolution) Spiral will be made of big steps for
+  # big words and small steps for small words
   d <- 
     d %>% 
     mutate(x1 = runif(nrow(d), h_bounds[1], h_bounds[2]),
            y1 = runif(nrow(d), v_bounds[1], v_bounds[2]),
-           spiral = map2(x1, y1, bitmap_spiral, l=spiral_length, step = spiral_step))
-  
-  
-  # Add buffer to the words
-  print("Adding buffer")
-  d <-
-    d %>% mutate(word_mat = map(word_mat, add_buffer, buffer=buffer))
+           spiral = pmap(list(x1, y1, weight), ~spiral(x=..1, y=..2, a0 =..3/2,
+                                                       a1 = spiral_radius, 
+                                                       n = spiral_turns, 
+                                                       res = spiral_res)),
+           word_mat = map(word_mat, add_buffer, buffer=buffer))
   
   # Initialise progress bar
   pb <- txtProgressBar(max=nrow(d), style = 3)
@@ -164,8 +144,12 @@ bmwc <- function(data,
   }
   close(pb)
   
+  # If some words have not been placed - print them here
   if(sum(!is.na(np)) > 0){print(np[!is.na(np)])}else(message("All words placed"))
   
+  # Determine the first and last row and column of the page that contains any part of a placed word
+  # Then crop the page to those rows and columns. This centers and maximises the size of the wordcloud in the
+  # device view
   col_na <- apply(page, 2, function(x) all(is.na(x)))
   crop_left <- rle(col_na)$lengths[1]
   crop_right <- page_w - rle(rev(col_na))$lengths[1]
@@ -176,7 +160,6 @@ bmwc <- function(data,
   
   page_cropped <- page[crop_top:crop_bottom, crop_left:crop_right]
   
-  
   # remove the word buffer pixels
   if(!show_word_buffer){page_cropped[page_cropped == 0] <- NA}
   
@@ -184,6 +167,18 @@ bmwc <- function(data,
   if(view == TRUE){
     par(xaxs="i",  yaxs="i")
     plot_mat(page_cropped)
+    
+    if(markup){
+      box()
+      axis(1)
+      axis(2)
+    }
+    
+    if(plot_spirals){
+      for(i in 1:nrow(d))(
+        plot_spiral(d$spiral[[i]], col=2)
+      )
+    }
   }
   
   if(save == TRUE){
@@ -191,8 +186,13 @@ bmwc <- function(data,
     png(filename, width = page_w, height=page_h, units = "px", res=page_res)
     par(xaxs="i",  yaxs="i")
     plot_mat(page_cropped)
-    # axis(1)
-    # axis(2)
+    
+    if(markup){
+      box()
+      axis(1)
+      axis(2)
+    }
+    
     invisible(dev.off())
     message("Complete")
   }

@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   fig.width=10, 
   fig.height=8,
+  out.width = "100%",
   fig.align='center')
 ```
 # cloudr - bitmap (using fontr)
@@ -35,75 +36,20 @@ library(cloudr)
 obama[1:10, ]
 ```
 
-## Create word cloud
-### Straight wordcloud
+## Create word clouds
+
 ```{r results='hide'}
-cloudr::bmwc(cloudr::obama[1:200,],
-             min_size = 30,
-             max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
-             angle_range = c(0, 0),
-             buffer = 5,
-             seed = 1)
+bmwc(cloudr::obama[1:200,], seed = 42)
 ```
 
-### A little bit of wobble
 ```{r results='hide'}
-cloudr::bmwc(cloudr::obama[1:200,],
-             min_size = 30,
-             max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
-             angle_range = c(-5, 5),
-             buffer = 5,
-             seed = 1)
+bmwc(cloudr::obama[1:200,], angle_range = c(-10,10), seed = 42)
 ```
 
-### Random angles
-```{r results='hide'}
-cloudr::bmwc(cloudr::obama[1:200,],
-             min_size = 30,
-             max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
-             angle_range = c(-90, 90),
-             buffer = 5,
-             seed = 1)
-```
 
 ### Change font
 ```{r results='hide'}
 sysfonts::font_add(family = "old_eng", "C:/Windows/Fonts/OLDENGL.TTF")
-
-cloudr::bmwc(cloudr::obama[1:200,],
-             min_size = 30,
-             max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
-             angle_range = c(-5, 5),
-             buffer = 5,
-             seed = 1,
-             font_family = "old_eng")
+bmwc(obama[1:200,], font_family = "old_eng", seed=42)
+bmwc(obama[1:200,], font_family = "old_eng", seed=42, angle_range = c(-25,25))
 ```
-
-### Increase word buffer
-```{r results='hide'}
-cloudr::bmwc(cloudr::obama[1:200,],
-             min_size = 30,
-             max_size = 350,
-             spiral_step = 40,
-             spiral_length = 100,
-             angle_range = c(0, 0),
-             buffer = 25,
-             seed = 1)
-```
-
-
-## Example of buffer
-```{r fig.width=4}
-word <- word_mat("aaabc", weight=50, rot=0)
-plot_mat(word)
-plot_mat(add_buffer(word, buffer = 10, fill = 50))
-```
-

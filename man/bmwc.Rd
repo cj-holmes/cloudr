@@ -4,11 +4,12 @@
 \alias{bmwc}
 \title{Bitmap wordcloud}
 \usage{
-bmwc(data, min_size = 10, max_size = 200, angle_range = c(0, 0),
-  buffer = 5, view = TRUE, save = FALSE, filename,
-  font_face = "regular", font_family = "sans", seed = NULL,
-  spiral_length = 50, spiral_step = 50, page_res = 600,
-  v_buffer = 40, h_buffer = 30)
+bmwc(data, min_size = 25, max_size = 300, angle_range = c(0, 0),
+  buffer = 5, show_word_buffer = FALSE, view = TRUE, save = FALSE,
+  filename, font_face = "regular", font_family = "sans", seed = NULL,
+  v_buffer = 45, h_buffer = 35, page_w = 5000, page_h = 5000,
+  spiral_radius = 1000, spiral_turns = 5, spiral_res = 500,
+  markup = FALSE, plot_spirals = FALSE)
 }
 \arguments{
 \item{data}{}
@@ -33,15 +34,15 @@ bmwc(data, min_size = 10, max_size = 200, angle_range = c(0, 0),
 
 \item{seed}{}
 
+\item{v_buffer}{}
+
+\item{h_buffer}{}
+
 \item{spiral_length}{}
 
 \item{spiral_step}{}
 
 \item{page_res}{}
-
-\item{v_buffer}{}
-
-\item{h_buffer}{}
 }
 \description{
 Bitmap wordcloud

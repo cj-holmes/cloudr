@@ -4,31 +4,40 @@
 \alias{bitmap_spiral}
 \title{Bitmap spiral coordinates}
 \usage{
-bitmap_spiral(x1, y1, step = 10, l = 100, type = sample(c(1, 2), 1))
+bitmap_spiral(x1, y1, radius, res, type = sample(c(1, 2), 1))
 }
 \arguments{
-\item{x1}{Starting x position}
+\item{x1}{Spiral origin (x coordinate)}
 
-\item{y1}{Starting y position}
+\item{y1}{Spiral origin (y coordinate)}
 
-\item{step}{Step length of spiral (distance before turning a right angle)}
+\item{radius}{Desired radius of bitmap spiral}
 
-\item{l}{Length of spiral (how many straight lines of length step) every 4 l gets a new layer of the spiral}
+\item{res}{Resolution of spiral (step length)}
 
 \item{type}{1 = square, 2 = diamond}
 }
 \description{
-Generate a tibble of spiral cartesian coordinates as either a square spiral or a 
-diamond spiral (a square spiral rotated by 45 degrees) All coordiabtes returned are
+Generate a tibble of spiral cartesian coordinates as either a square spiral or a
+diamond spiral (a square spiral rotated by 45 degrees) All coordinates returned are
 integers
 }
 \examples{
 library(tidyverse)
-# spiral_coords(0, 0, l=1, step = 1) \%>\%
-#     mutate(xend = lead(x),
-#            yend=lead(y)) \%>\%
-#     ggplot(aes(x=x, y=y, xend=xend, yend=yend))+
-#     geom_segment()+
-#     geom_point(aes(x=0, y=0), col=2, size=2)+
-#     coord_equal()
+# Define radius and resolution
+rad <- 1000
+res <- 57
+
+# Plot both bitmap spirals
+bitmap_spiral(0, 0, radius = rad, res = res, type = 1) \%>\%
+  mutate(type = "square") \%>\%
+  bind_rows(bitmap_spiral(0, 0, radius = rad, res = res, type = 2) \%>\%
+              mutate(type = "diamond")) \%>\%
+  group_by(type) \%>\%
+  mutate(xend = lead(x), yend=lead(y)) \%>\%
+  ggplot(aes(x=x, y=y, xend=xend, yend=yend, col=type))+
+  geom_segment()+
+  geom_point(aes(x,y))+
+  coord_equal()+
+  theme_gray()
 }
